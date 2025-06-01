@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <a href="{% url 'home' %}" class="btn btn-outline-info mb-3">
+  ← Back to All Posts
+</a>
+
+  <h2 class="text-info mb-4">Category: {{ category.name }}</h2>
+
+  {% if posts %}
+    <ul class="list-group">
+      {% for post in posts %}
+        <li class="list-group-item">
+          <a href="{% url 'post_detail' post.id %}" class="fw-bold">{{ post.title }}</a><br>
+          <small class="text-muted">By {{ post.user.username }} – {{ post.created_at|date:"F j, Y" }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted">No posts in this category yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

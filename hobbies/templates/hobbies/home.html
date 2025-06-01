@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <!-- Banner -->
+<div class="mb-4">
+  <img src="{% static 'images/banner.png' %}" alt="CraftHub Banner" class="img-fluid rounded shadow-sm w-100" style="max-height: 400px; object-fit: cover;">
+</div>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-info">All Posts</h2>
+    <a href="{% url 'create_post' %}" class="btn btn-info">+ Add New Post</a>
+  </div>
+
+  <!-- Categories -->
+  <div class="mb-4">
+    <h5>Categories:</h5>
+    <div class="d-flex flex-wrap gap-2">
+      {% for category in categories %}
+        <a href="{% url 'category_detail' category.id %}" class="btn btn-outline-info btn-sm">{{ category.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Recipe cards -->
+{% if posts %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for post in posts %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+        {% if post.image %}
+  <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+{% else %}
+ <img src="{% static 'images/default.png' %}" class="card-img-top" alt="Default Image">
+{% endif %}
+
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{% url 'post_detail' post.id %}" class="text-decoration-none text-info">{{ post.title }}</a>
+            </h5>
+            <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+          </div>
+          <div class="card-footer text-muted small">
+            {{ post.category.name }} | by {{ post.user.username }} on {{ post.created_at|date:"M d, Y" }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No posts yet.</p>
+{% endif %}
+
+</div>
+{% endblock %}
